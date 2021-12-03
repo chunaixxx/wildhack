@@ -4,12 +4,12 @@ const Schema = mongoose.Schema
 const answerScheme = new Schema({
 	keywords: {
 		type: Array,
-		required: true
+		default: true
 	},
 	
 	answer: {
 		type: String,
-		required: true
+		default: true
 	},
 })
 
