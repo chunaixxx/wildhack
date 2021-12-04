@@ -1,4 +1,4 @@
-import mongoose from 'mongoose'
+const mongoose = require('mongoose')
 const Schema = mongoose.Schema
 
 const answerScheme = new Schema({
@@ -15,4 +15,4 @@ const answerScheme = new Schema({
 
 const Answer = mongoose.model('Answer', answerScheme)
 
-export default Answer
+module.exports = Answer

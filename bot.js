@@ -1,15 +1,32 @@
-import dotenv from 'dotenv'
-dotenv.config()
+require('dotenv').config()
+// require('./commonDB.js')
 
-import './commonDB.js'
+const { Telegraf, session, Scenes } = require('telegraf')
 
-import TelegramBot from 'node-telegram-bot-api'
+// markups
+const menuMarkup = require('./markup/menuMarkup.js')
 
-const token = process.env.TOKEN
+// scenes
+const qaScene = require('./scene/qaScene.js')
 
-const bot = new TelegramBot(token, { polling: true })
+const stage = new Scenes.Stage([qaScene])
+const { enter } = Scenes.Stage
 
-bot.on('message', msg => {
-	const chatId = msg.chat.id
-	bot.sendMessage(chatId, 'Received your message')
-})
+// initial bot
+const bot = new Telegraf(process.env.TOKEN)
+
+// middleware
+bot.use(session())
+bot.use(stage.middleware())
+
+bot.on('message', ctx => 
+	ctx.reply('Выберите действие.', menuMarkup)
+)
+
+bot.action('qa', enter('qa'))
+
+bot.launch()
+	.then(() => console.log('Бот запущен'))
+
+process.once('SIGINT', () => bot.stop('SIGINT'))
+process.once('SIGTERM', () => bot.stop('SIGTERM'))
