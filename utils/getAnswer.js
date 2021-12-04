@@ -15,3 +15,5 @@ const getAnswer = message => {
 		)
 	})
 }
+
+module.exports = getAnswer;
