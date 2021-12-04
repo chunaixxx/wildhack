@@ -7,8 +7,9 @@ const { Telegraf, session, Scenes } = require('telegraf')
 
 // scenes
 const qaScene = require('./scene/qaScene.js')
+const cordonsScene = require('./scene/cordonsScene.js')
 
-const stage = new Scenes.Stage([qaScene])
+const stage = new Scenes.Stage([qaScene, cordonsScene])
 const { enter } = Scenes.Stage
 
 // initial bot
@@ -19,6 +20,7 @@ bot.use(session())
 bot.use(stage.middleware())
 
 bot.hears(/Задать вопрос/i, enter('qa'))
+bot.hears(/Кордоны/i, enter('cordons'))
 
 bot.on('message', ctx => baseMessage(ctx))
 

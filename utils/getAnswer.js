@@ -1,12 +1,19 @@
-const natural = require('natural');
+const natural = require('natural')
+const RU = natural.PorterStemmerRu
 
 const getAnswer = message => {
-    return new Promise((res, rej) => {
-        natural.BayesClassifier.load('classifier.json', null, (err, classifier) => {
-            if (err) rej()
-            res(classifier.getClassifications(message))
-        })
-    })
+	return new Promise((res, rej) => {
+		natural.BayesClassifier.load(
+			'./data/classifier.json',
+			RU,
+			(err, classifier) => {
+				const values = classifier.getClassifications(message)
+				const answer = values.sort((a, b) => a - b)[0].label
+				if (err) rej()
+				res(answer)
+			}
+		)
+	})
 }
 
 module.exports = getAnswer
