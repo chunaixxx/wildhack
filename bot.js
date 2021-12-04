@@ -1,10 +1,9 @@
 require('dotenv').config()
 // require('./commonDB.js')
 
-const { Telegraf, session, Scenes } = require('telegraf')
+const baseMessage = require('./baseMessage')
 
-// markups
-const menuMarkup = require('./markup/menuMarkup.js')
+const { Telegraf, session, Scenes } = require('telegraf')
 
 // scenes
 const qaScene = require('./scene/qaScene.js')
@@ -19,11 +18,15 @@ const bot = new Telegraf(process.env.TOKEN)
 bot.use(session())
 bot.use(stage.middleware())
 
-bot.on('message', ctx => 
-	ctx.reply('Выберите действие.', menuMarkup)
-)
+bot.on('message', ctx => {
+	const msg = ctx.update.message.text
 
-bot.action('qa', enter('qa'))
+	if (!msg.includes('Задать'))
+})
+
+bot.hears(/Задать вопрос/i, enter('qa'))
+
+bot.on('message', ctx => baseMessage(ctx))
 
 bot.launch()
 	.then(() => console.log('Бот запущен'))
