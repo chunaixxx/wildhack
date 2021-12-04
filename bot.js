@@ -18,12 +18,6 @@ const bot = new Telegraf(process.env.TOKEN)
 bot.use(session())
 bot.use(stage.middleware())
 
-bot.on('message', ctx => {
-	const msg = ctx.update.message.text
-
-	if (!msg.includes('Задать'))
-})
-
 bot.hears(/Задать вопрос/i, enter('qa'))
 
 bot.on('message', ctx => baseMessage(ctx))
