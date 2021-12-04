@@ -25,10 +25,17 @@ const qaScene = new Scenes.WizardScene(
 			return baseMessage(ctx)
 		}
 
-		let answer = await getAnswer(msg)
+		let answer = ''
+
+		try {
+			answer = await getAnswer(msg)
+		} catch (error) {
+			answer = '❗ Я тебя не понял, попробуй переформулироровать вопрос'
+		}
 
 		ctx.reply(
-			answer + '\n\n🐺 Если хочешь еще что-то узнать, то не стесняйся — я тебя слушаю',
+			answer + '\n\n❗ Если хочешь еще что-то узнать, то не стесняйся — я тебя слушаю',
+			{ parse_mode: "HTML" },
 			keyboard('Нет, спасибо')
 		)
 	}
