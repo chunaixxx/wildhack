@@ -9,10 +9,13 @@ const getAnswer = message => {
 			'./data/classifier.json',
 			RU,
 			(err, classifier) => {
-				const values = classifier.getClassifications(message)
-				const answer = values.sort((a, b) => a - b)[0].label
-				if (err) rej()
-				res(answers[answer])
+				const values = classifier.getClassifications(message).sort((a, b) => b.value - a.value)
+				let sum = 0;
+				for (let val of values) {
+					sum += val.value
+				}
+				if (sum > 1) rej()
+				else res(answers[values[0].label])
 			}
 		)
 	})

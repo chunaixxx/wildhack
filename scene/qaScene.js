@@ -1,4 +1,5 @@
 const { Scenes } = require('telegraf')
+const axios = require('axios')
 
 const getAnswer = require('../utils/getAnswer')
 
@@ -10,14 +11,27 @@ const qaScene = new Scenes.WizardScene(
 
 	ctx => {
 		ctx.reply(
-			'❗ Задай свой вопрос, я тебя внимательно слушаю',
+			'❗ Задай свой вопрос, а я постараюсь на него ответить',
 			keyboard('Назад')
 		)
 		return ctx.wizard.next()
 	},
 
 	async ctx => {
-		const msg = ctx.update.message.text
+		let msg = ''
+
+		if (ctx.message.voice) {
+			const voice = await ctx.telegram.getFileLink(ctx.message.voice.file_id)
+
+			const voiceFile = await axios('https://api.telegram.org/file/bot5080860147:AAFk0GVyoKQarkWvLf7qrpvPVd3jnwYYn5U/voice/file_2.oga')
+
+			msg = '1'
+
+			console.log(voiceFile)
+		} else {
+			msg = ctx.update.message.text
+		}
+
 
 		if (msg == 'Назад' || msg == 'Нет, спасибо') {
 			ctx.scene.leave()
@@ -29,15 +43,23 @@ const qaScene = new Scenes.WizardScene(
 
 		try {
 			answer = await getAnswer(msg)
-		} catch (error) {
-			answer = '❗ Я тебя не понял, попробуй переформулироровать вопрос'
+
+			ctx.reply(
+				answer + '\n\n❗ Если хочешь еще что-то узнать, то не стесняйся — я тебя слушаю',
+				{ parse_mode: "HTML" },
+				keyboard('Нет, спасибо')
+			)
+		} catch (e) {
+			answer = 
+
+			ctx.reply(
+				answer + '❗ Я тебя не понял, попробуй переформулироровать вопрос',
+				{ parse_mode: "HTML" },
+				keyboard('Назад')
+			)
 		}
 
-		ctx.reply(
-			answer + '\n\n❗ Если хочешь еще что-то узнать, то не стесняйся — я тебя слушаю',
-			{ parse_mode: "HTML" },
-			keyboard('Нет, спасибо')
-		)
+
 	}
 )
 
