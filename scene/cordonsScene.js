@@ -37,7 +37,7 @@ const cordonsScene = new Scenes.WizardScene(
 
 			let sendString = `<i>${ title }</i>\n\n<b>Инфраструктура кордона</b>\n${ infra }\n\n<b>Добровольческие работы</b>\n${ work }`
 
-			ctx.reply(sendString, { parse_mode: "HTML" })
+			ctx.reply(sendString, { parse_mode: "HTML" }, keyboard('👈🏻 Назад', ...cordonsName))
 		} else {
 			return ctx.reply(
 				'❗ Выберите кордон из предложенного списка',

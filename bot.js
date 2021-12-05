@@ -1,5 +1,4 @@
 require('dotenv').config()
-// require('./commonDB.js')
 
 const baseMessage = require('./baseMessage')
 
