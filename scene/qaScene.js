@@ -30,16 +30,28 @@ const qaScene = new Scenes.WizardScene(
 		try {
 			answer = await getAnswer(msg)
 
-			ctx.reply(
-				answer + '\n\n❗ Если хочешь еще что-то узнать, то не стесняйся — я тебя слушаю',
-				{ parse_mode: "HTML" },
-				keyboard('Нет, спасибо')
-			)
+			if (answer == 'file') {
+				ctx.reply(
+					'Если твоя анкета одобрена, то тебе необходимо заполнить договор\n\n❗ Если хочешь еще что-то узнать, то не стесняйся — я тебя слушаю',
+					{ parse_mode: "HTML" },
+					keyboard('Нет, спасибо')
+				)
+
+				ctx.replyWithDocument({
+					source: './data/Копия_Договор_о_волонтерской_деятельности_шаблон.pdf'
+				})
+			} else {
+				ctx.reply(
+					answer + '\n\n❗ Если хочешь еще что-то узнать, то не стесняйся — я тебя слушаю',
+					{ parse_mode: "HTML" },
+					keyboard('Нет, спасибо')
+				)
+			}
 		} catch (e) {
-			answer = 
+			console.log(e)
 
 			ctx.reply(
-				answer + '❗ Я тебя не понял, попробуй переформулироровать вопрос',
+				'❗ Я тебя не понял, попробуй переформулироровать вопрос',
 				{ parse_mode: "HTML" },
 				keyboard('Назад')
 			)
